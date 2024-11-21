@@ -6,25 +6,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Table(name = "destinations")
+@Table(name = "orders")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class Destination {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(unique = true)
-    String name;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "destination_id", nullable = false)
+    Destination destination;
 
-    Integer distance;
+    String deliveryDate;
 
-//    @OneToMany(fetch = FetchType.LAZY)
-//    List<Order> orders;
+    @Enumerated(EnumType.STRING)
+    OrderStatus status;
+
+    Long lastUpdated;
+
 }
