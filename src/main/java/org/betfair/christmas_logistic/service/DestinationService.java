@@ -43,7 +43,7 @@ public class DestinationService {
         if (!destinationRepository.existsById(destinationId)) {
             throw new BadDestinationRequestException(String.format("Destination not found for id %d", destinationId));
         }
-        if (!destinationRepository.findAllByName(destinationToUpdate.name()).isEmpty()) {
+        if (destinationRepository.findByName(destinationToUpdate.name()).isPresent()) {
             throw new BadDestinationRequestException("Destination with the same name already exists");
         }
 

@@ -4,5 +4,4 @@ public record DestinationDto(
         Long id,
         String name,
         Integer distance
-) {
-}
+) {}
