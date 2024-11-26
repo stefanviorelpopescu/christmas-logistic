@@ -5,6 +5,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record OrderCreateDto(
         String destinationName,
-        String deliveryDate,
-        Long lastUpdated
+        String deliveryDate
 ) {}

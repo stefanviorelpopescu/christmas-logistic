@@ -1,9 +1,6 @@
 package org.betfair.christmas_logistic.controller.dto;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 public record DestinationUpdateDto(
         @NotNull
@@ -15,4 +12,10 @@ public record DestinationUpdateDto(
         @Max(99999)
         Integer distance
 ) {
+
+        @AssertTrue(message = "name invalid")
+        public boolean isNameLongerThanDistance() {
+                return name.length() < distance;
+        }
+
 }

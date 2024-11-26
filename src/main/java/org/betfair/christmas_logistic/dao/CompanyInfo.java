@@ -12,11 +12,13 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class CompanyInfo {
 
+    public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
     private final LocalDate currentDate = LocalDate.of(2021, 12, 15);
     private Long profit;
 
     public String getCurrentDateString() {
-        return DateTimeFormatter.ofPattern("dd-MM-yyyy").format(currentDate);
+        return dateTimeFormatter.format(currentDate);
     }
 
 }

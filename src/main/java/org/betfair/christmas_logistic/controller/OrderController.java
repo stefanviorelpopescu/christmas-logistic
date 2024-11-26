@@ -1,11 +1,10 @@
 package org.betfair.christmas_logistic.controller;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.betfair.christmas_logistic.controller.dto.OrderCreateDto;
 import org.betfair.christmas_logistic.controller.dto.OrderDto;
+import org.betfair.christmas_logistic.controller.exception.InvalidOrderCreateDtoException;
 import org.betfair.christmas_logistic.service.OrderService;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +28,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public List<OrderDto> addOrders(@RequestBody @Validated List<OrderCreateDto> ordersToCreate) {
+    public List<OrderDto> addOrders(@RequestBody List<OrderCreateDto> ordersToCreate) throws InvalidOrderCreateDtoException {
         return orderService.createOrders(ordersToCreate);
     }
 }

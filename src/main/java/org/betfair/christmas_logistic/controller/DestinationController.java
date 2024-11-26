@@ -6,7 +6,6 @@ import org.betfair.christmas_logistic.controller.dto.DestinationDto;
 import org.betfair.christmas_logistic.controller.dto.DestinationUpdateDto;
 import org.betfair.christmas_logistic.controller.exception.BadDestinationRequestException;
 import org.betfair.christmas_logistic.service.DestinationService;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,16 +41,6 @@ public class DestinationController {
     @GetMapping
     public List<DestinationDto> getAllDestinations() {
         return destinationService.getAllDestinations();
-    }
-
-    @ExceptionHandler({
-//            SQLIntegrityConstraintViolationException.class,
-//            MethodArgumentNotValidException.class,
-//            MethodArgumentTypeMismatchException.class,
-            BadDestinationRequestException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleConstraintViolation(Exception exception) {
-        return exception.getMessage();
     }
 
 }
