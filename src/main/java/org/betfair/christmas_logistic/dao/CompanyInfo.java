@@ -14,11 +14,15 @@ public class CompanyInfo {
 
     public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    private final LocalDate currentDate = LocalDate.of(2021, 12, 15);
+    private LocalDate currentDate = LocalDate.of(2021, 12, 14);
     private Long profit;
 
     public String getCurrentDateString() {
         return dateTimeFormatter.format(currentDate);
+    }
+
+    public void advanceCurrentDate() {
+        currentDate = currentDate.plusDays(1);
     }
 
 }

@@ -7,5 +7,6 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findAllByDestination_NameContainingIgnoreCaseAndDeliveryDate(String destinationName, String deliveryDate);
+    List<Order> findAllByDeliveryDate(String deliveryDate);
 
 }

@@ -92,4 +92,9 @@ public class OrderService {
                 .lastUpdated(System.currentTimeMillis())
                 .build();
     }
+
+    public List<Order> getOrdersForDate(LocalDate currentDate) {
+        String dateAsString = CompanyInfo.dateTimeFormatter.format(currentDate);
+        return orderRepository.findAllByDeliveryDate(dateAsString);
+    }
 }
