@@ -15,7 +15,7 @@ public class CompanyInfo {
     public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     private LocalDate currentDate = LocalDate.of(2021, 12, 14);
-    private Long profit;
+    private long profit;
 
     public String getCurrentDateString() {
         return dateTimeFormatter.format(currentDate);
@@ -23,6 +23,10 @@ public class CompanyInfo {
 
     public void advanceCurrentDate() {
         currentDate = currentDate.plusDays(1);
+    }
+
+    public synchronized void increaseProfit(long delta) {
+        profit += delta;
     }
 
 }

@@ -1,11 +1,14 @@
 package org.betfair.christmas_logistic.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.betfair.christmas_logistic.controller.dto.OrderCreateDto;
 import org.betfair.christmas_logistic.controller.dto.OrderDto;
 import org.betfair.christmas_logistic.controller.exception.InvalidOrderCreateDtoException;
 import org.betfair.christmas_logistic.converter.OrderConverter;
 import org.betfair.christmas_logistic.dao.*;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,7 @@ import static org.betfair.christmas_logistic.converter.OrderConverter.entityList
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -28,10 +32,7 @@ public class OrderService {
     public void cancelOrders(List<Long> orderIds) {
         List<Order> ordersToCancel = orderRepository.findAllById(orderIds);
         for (Order order : ordersToCancel) {
-            if (!order.getStatus().equals(OrderStatus.DELIVERED)
-                    && !order.getStatus().equals(OrderStatus.CANCELED)) {
-                order.setStatus(OrderStatus.CANCELED);
-            }
+            orderRepository.changeOrderStatus(order, OrderStatus.CANCELED);
         }
         orderRepository.saveAll(ordersToCancel);
     }
@@ -96,5 +97,23 @@ public class OrderService {
     public List<Order> getOrdersForDate(LocalDate currentDate) {
         String dateAsString = CompanyInfo.dateTimeFormatter.format(currentDate);
         return orderRepository.findAllByDeliveryDate(dateAsString);
+    }
+
+    @SneakyThrows
+    @Async("deliveryExecutor")
+    public void startDeliveringOrders(Destination destination, List<Order> orders) {
+        List<Long> orderIds = orders.stream()
+                .map(Order::getId)
+                .toList();
+
+        log.info("Starting deliveries to {} on {} for {} km.", destination.getName(), Thread.currentThread().getName(), destination.getDistance());
+        orderRepository.markAsDelivering(orderIds);
+
+        Thread.sleep(destination.getDistance() * 1000);
+
+        int deliveredCount = orderRepository.markAsDelivered(orderIds);
+        companyInfo.increaseProfit((long) deliveredCount * destination.getDistance());
+
+        log.info("Delivered to {}", destination.getName());
     }
 }

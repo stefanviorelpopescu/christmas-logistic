@@ -2,9 +2,7 @@ package org.betfair.christmas_logistic.facade;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.betfair.christmas_logistic.dao.CompanyInfo;
-import org.betfair.christmas_logistic.dao.Destination;
-import org.betfair.christmas_logistic.dao.Order;
+import org.betfair.christmas_logistic.dao.*;
 import org.betfair.christmas_logistic.service.OrderService;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,7 @@ public class ShippingFacade {
 
     private final CompanyInfo companyInfo;
     private final OrderService orderService;
-    private final TaskExecutor taskExecutor2;
+//    private final TaskExecutor deliveryExecutor;
 
     public void newDay() {
         companyInfo.advanceCurrentDate();
@@ -36,8 +34,10 @@ public class ShippingFacade {
                 .collect(Collectors.joining(", "));
         log.info("Today we will be delivering to {}", destinationList);
 
-        ordersByDestination.entrySet().forEach(destinationAndOrders ->
-                taskExecutor2.execute(new DestinationTask(destinationAndOrders)));
+//        ordersByDestination.forEach((destination, orders) ->
+//                taskExecutor.execute(new DestinationTask(destination, orders, orderRepository)));
 
+        ordersByDestination.forEach(orderService::startDeliveringOrders);
     }
+
 }
